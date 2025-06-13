@@ -24,22 +24,50 @@ const RESOURCE_CONFIGS = {
     scaledJob: {
         name: 'KEDA ScaledJob',
         fields: [
-            { id: 'minReplicaCount', label: 'Min Replica Count', type: 'number', min: 0, placeholder: '1' },
-            { id: 'maxReplicaCount', label: 'Max Replica Count', type: 'number', min: 1, placeholder: '10' },
+            { 
+                id: 'replicaCount', 
+                label: 'Replica Count', 
+                type: 'group', 
+                fields: [
+                    { id: 'minReplicaCount', label: 'Min', type: 'number', min: 0, placeholder: '1' },
+                    { id: 'maxReplicaCount', label: 'Max', type: 'number', min: 1, placeholder: '10' }
+                ]
+            },
             { id: 'parallelism', label: 'Parallelism', type: 'number', min: 1, placeholder: '1' },
-            { id: 'requestedMemory', label: 'Requested Memory (Mi)', type: 'number', min: 1, placeholder: '256' },
-            { id: 'requestedCpu', label: 'Requested CPU (m)', type: 'number', min: 1, placeholder: '100' },
-            { id: 'maxMemory', label: 'Max Memory (Mi)', type: 'number', min: 1, placeholder: '512' }
+            { 
+                id: 'memory', 
+                label: 'Memory (Mi)', 
+                type: 'group', 
+                fields: [
+                    { id: 'requestedMemory', label: 'Requested', type: 'number', min: 1, placeholder: '256' },
+                    { id: 'maxMemory', label: 'Limit', type: 'number', min: 1, placeholder: '512' }
+                ]
+            },
+            { id: 'requestedCpu', label: 'CPU (m)', type: 'number', min: 1, placeholder: '100' }
         ]
     },
     scaledObject: {
         name: 'KEDA ScaledObject',
         fields: [
-            { id: 'minReplicaCount', label: 'Min Replica Count', type: 'number', min: 0, placeholder: '1' },
-            { id: 'maxReplicaCount', label: 'Max Replica Count', type: 'number', min: 1, placeholder: '10' },
-            { id: 'requestedMemory', label: 'Requested Memory (Mi)', type: 'number', min: 1, placeholder: '256' },
-            { id: 'requestedCpu', label: 'Requested CPU (m)', type: 'number', min: 1, placeholder: '100' },
-            { id: 'maxMemory', label: 'Max Memory (Mi)', type: 'number', min: 1, placeholder: '512' }
+            { 
+                id: 'replicaCount', 
+                label: 'Replica Count', 
+                type: 'group', 
+                fields: [
+                    { id: 'minReplicaCount', label: 'Min', type: 'number', min: 0, placeholder: '1' },
+                    { id: 'maxReplicaCount', label: 'Max', type: 'number', min: 1, placeholder: '10' }
+                ]
+            },
+            { 
+                id: 'memory', 
+                label: 'Memory (Mi)', 
+                type: 'group', 
+                fields: [
+                    { id: 'requestedMemory', label: 'Requested', type: 'number', min: 1, placeholder: '256' },
+                    { id: 'maxMemory', label: 'Limit', type: 'number', min: 1, placeholder: '512' }
+                ]
+            },
+            { id: 'requestedCpu', label: 'CPU (m)', type: 'number', min: 1, placeholder: '100' }
         ]
     },
     deployment: {
@@ -47,20 +75,42 @@ const RESOURCE_CONFIGS = {
         fields: [
             { id: 'hasHPA', label: 'Has HPA', type: 'toggle' },
             { id: 'replicas', label: 'Replicas', type: 'number', min: 1, placeholder: '3', showWhen: { hasHPA: false } },
-            { id: 'minReplicaCount', label: 'Min Replica Count', type: 'number', min: 0, placeholder: '1', showWhen: { hasHPA: true } },
-            { id: 'maxReplicaCount', label: 'Max Replica Count', type: 'number', min: 1, placeholder: '10', showWhen: { hasHPA: true } },
-            { id: 'requestedMemory', label: 'Requested Memory (Mi)', type: 'number', min: 1, placeholder: '256' },
-            { id: 'requestedCpu', label: 'Requested CPU (m)', type: 'number', min: 1, placeholder: '100' },
-            { id: 'maxMemory', label: 'Max Memory (Mi)', type: 'number', min: 1, placeholder: '512' }
+            { 
+                id: 'replicaCount', 
+                label: 'Replica Count', 
+                type: 'group', 
+                showWhen: { hasHPA: true },
+                fields: [
+                    { id: 'minReplicaCount', label: 'Min', type: 'number', min: 0, placeholder: '1' },
+                    { id: 'maxReplicaCount', label: 'Max', type: 'number', min: 1, placeholder: '10' }
+                ]
+            },
+            { 
+                id: 'memory', 
+                label: 'Memory (Mi)', 
+                type: 'group', 
+                fields: [
+                    { id: 'requestedMemory', label: 'Requested', type: 'number', min: 1, placeholder: '256' },
+                    { id: 'maxMemory', label: 'Limit', type: 'number', min: 1, placeholder: '512' }
+                ]
+            },
+            { id: 'requestedCpu', label: 'CPU (m)', type: 'number', min: 1, placeholder: '100' }
         ]
     },
     statefulSet: {
         name: 'StatefulSet',
         fields: [
             { id: 'replicas', label: 'Replicas', type: 'number', min: 1, placeholder: '3' },
-            { id: 'requestedMemory', label: 'Requested Memory (Mi)', type: 'number', min: 1, placeholder: '256' },
-            { id: 'requestedCpu', label: 'Requested CPU (m)', type: 'number', min: 1, placeholder: '100' },
-            { id: 'maxMemory', label: 'Max Memory (Mi)', type: 'number', min: 1, placeholder: '512' }
+            { 
+                id: 'memory', 
+                label: 'Memory (Mi)', 
+                type: 'group', 
+                fields: [
+                    { id: 'requestedMemory', label: 'Requested', type: 'number', min: 1, placeholder: '256' },
+                    { id: 'maxMemory', label: 'Limit', type: 'number', min: 1, placeholder: '512' }
+                ]
+            },
+            { id: 'requestedCpu', label: 'CPU (m)', type: 'number', min: 1, placeholder: '100' }
         ]
     }
 };
@@ -143,7 +193,7 @@ class Scalculator {
 
         config.fields.forEach(field => {
             if (this.shouldShowField(field, currentValues)) {
-                html += this.generateFieldHTML(field, currentValues[field.id]);
+                html += this.generateFieldHTML(field, currentValues);
             }
         });
 
@@ -169,8 +219,9 @@ class Scalculator {
     /**
      * Generate HTML for a form field
      */
-    generateFieldHTML(field, currentValue = '') {
+    generateFieldHTML(field, currentValues = {}) {
         if (field.type === 'toggle') {
+            const currentValue = currentValues[field.id] || '';
             return `
                 <div class="form-group">
                     <div class="toggle-container">
@@ -184,6 +235,33 @@ class Scalculator {
             `;
         }
 
+        if (field.type === 'group') {
+            let groupHTML = `<div class="form-group form-group-container">
+                <label class="group-label">${field.label}:</label>
+                <div class="input-group">`;
+            
+            field.fields.forEach(subField => {
+                const currentValue = currentValues[subField.id] || '';
+                groupHTML += `
+                    <div class="input-group-item">
+                        <label for="${subField.id}" class="sub-label">${subField.label}:</label>
+                        <input 
+                            type="${subField.type}" 
+                            id="${subField.id}" 
+                            name="${subField.id}"
+                            ${subField.min !== undefined ? `min="${subField.min}"` : ''}
+                            placeholder="${subField.placeholder || ''}"
+                            value="${currentValue}"
+                        >
+                    </div>
+                `;
+            });
+            
+            groupHTML += `</div></div>`;
+            return groupHTML;
+        }
+
+        const currentValue = currentValues[field.id] || '';
         return `
             <div class="form-group">
                 <label for="${field.id}">${field.label}:</label>

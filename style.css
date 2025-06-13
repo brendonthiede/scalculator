@@ -79,6 +79,44 @@ main {
     transition: border-color 0.3s ease;
 }
 
+/* Grouped form inputs */
+.form-group-container {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 0.75rem;
+    border: 1px solid #e1e5e9;
+}
+
+.group-label {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem !important;
+    font-size: 0.95rem !important;
+}
+
+.input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.input-group-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-label {
+    font-size: 0.8rem !important;
+    color: #666 !important;
+    margin-bottom: 0.25rem !important;
+    font-weight: 500 !important;
+}
+
+.input-group-item input {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+}
+
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
@@ -164,26 +202,59 @@ input:checked + .slider:before {
     gap: 0.75rem;
 }
 
-.result-item {
-    display: flex;
-    flex-direction: column;
-    padding: 0.75rem;
+/* Grouped results */
+.result-group {
     background: #f8f9fa;
-    border-radius: 4px;
-    border-left: 3px solid #667eea;
+    border-radius: 6px;
+    padding: 0.75rem;
+    border-left: 4px solid #667eea;
 }
 
-.result-item label {
-    font-weight: 600;
-    color: #555;
-    font-size: 0.85rem;
+.result-group-label {
+    font-weight: 700;
+    color: #333;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.result-group-values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.result-group.single-value .result-group-values {
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+
+.result-value {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.result-label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 500;
     margin-bottom: 0.25rem;
 }
 
-.result-item span {
+.result-number {
     font-weight: bold;
     color: #667eea;
     font-size: 1rem;
+}
+
+.single-value .result-value {
+    align-items: center;
+}
+
+.single-value .result-number {
+    font-size: 1.1rem;
 }
 
 /* Input section headings - more compact */
@@ -251,6 +322,16 @@ footer {
     
     .results-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .input-group {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .result-group-values {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
     }
     
     .footer-links {

@@ -59,33 +59,52 @@
                 <div class="results-section">
                     <h2>Calculated Results</h2>
                     <div class="results-grid">
-                        <div class="result-item">
-                            <label>Minimum Pods:</label>
-                            <span id="minPods">-</span>
+                        <div class="result-group">
+                            <label class="result-group-label">Pods:</label>
+                            <div class="result-group-values">
+                                <div class="result-value">
+                                    <span class="result-label">Min:</span>
+                                    <span id="minPods" class="result-number">-</span>
+                                </div>
+                                <div class="result-value">
+                                    <span class="result-label">Max:</span>
+                                    <span id="maxPods" class="result-number">-</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="result-item">
-                            <label>Maximum Pods:</label>
-                            <span id="maxPods">-</span>
+                        <div class="result-group">
+                            <label class="result-group-label">Memory (Total):</label>
+                            <div class="result-group-values">
+                                <div class="result-value">
+                                    <span class="result-label">Min:</span>
+                                    <span id="minMemory" class="result-number">-</span>
+                                </div>
+                                <div class="result-value">
+                                    <span class="result-label">Max:</span>
+                                    <span id="maxMemory" class="result-number">-</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="result-item">
-                            <label>Minimum Memory (Total):</label>
-                            <span id="minMemory">-</span>
+                        <div class="result-group">
+                            <label class="result-group-label">CPU (Total):</label>
+                            <div class="result-group-values">
+                                <div class="result-value">
+                                    <span class="result-label">Min:</span>
+                                    <span id="minCpu" class="result-number">-</span>
+                                </div>
+                                <div class="result-value">
+                                    <span class="result-label">Max:</span>
+                                    <span id="maxCpu" class="result-number">-</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="result-item">
-                            <label>Maximum Memory (Total):</label>
-                            <span id="maxMemory">-</span>
-                        </div>
-                        <div class="result-item">
-                            <label>Minimum CPU (Total):</label>
-                            <span id="minCpu">-</span>
-                        </div>
-                        <div class="result-item">
-                            <label>Maximum CPU (Total):</label>
-                            <span id="maxCpu">-</span>
-                        </div>
-                        <div class="result-item">
-                            <label>Required Instances:</label>
-                            <span id="requiredInstances">-</span>
+                        <div class="result-group single-value">
+                            <label class="result-group-label">Required Instances:</label>
+                            <div class="result-group-values">
+                                <div class="result-value">
+                                    <span id="requiredInstances" class="result-number">-</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
