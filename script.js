@@ -366,123 +366,41 @@ class Scalculator {
 
 // Utility functions for testing
 const ScalculatorUtils = {
-    /**
-     * Calculate resources for KEDA ScaledJob
-     */
     calculateScaledJob(config) {
-        const minPods = Math.max(config.minReplicaCount || 0, config.parallelism || 1);
-        const maxPods = Math.max(config.maxReplicaCount || 0, config.parallelism || 1);
+        const minReplicaCount = Math.max(0, config.minReplicaCount || 0);
+        const maxReplicaCount = Math.max(0, config.maxReplicaCount || 0);
+        const parallelism = Math.max(0, config.parallelism || 1);
+        const requestedMemory = Math.max(0, config.requestedMemory || 0);
+        const requestedCpu = Math.max(0, config.requestedCpu || 0);
+        const maxMemory = Math.max(0, config.maxMemory || config.requestedMemory || 0);
+        
+        const minPods = Math.max(minReplicaCount, parallelism);
+        const maxPods = Math.max(maxReplicaCount, parallelism);
         
         return {
             minPods,
             maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
-        };
-    },
-
-    /**
-     * Calculate resources for KEDA ScaledObject
-     */
-    calculateScaledObject(config) {
-        const minPods = config.minReplicaCount || 0;
-        const maxPods = config.maxReplicaCount || 0;
-        
-        return {
-            minPods,
-            maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
-        };
-    },
-
-    /**
-     * Calculate resources for Deployment
-     */
-    calculateDeployment(config) {
-        let minPods, maxPods;
-        
-        if (config.hasHPA) {
-            minPods = config.minReplicaCount || 0;
-            maxPods = config.maxReplicaCount || 0;
-        } else {
-            minPods = maxPods = config.replicas || 0;
-        }
-        
-        return {
-            minPods,
-            maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
-        };
-    },
-
-    /**
-     * Calculate resources for StatefulSet
-     */
-    calculateStatefulSet(config) {
-        const pods = config.replicas || 0;
-        
-        return {
-            minPods: pods,
-            maxPods: pods,
-            minMemoryMi: pods * (config.requestedMemory || 0),
-            maxMemoryMi: pods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: pods * (config.requestedCpu || 0),
-            maxCpuM: pods * (config.requestedCpu || 0)
-        };
-    },
-
-    /**
-     * Calculate required instances
-     */
-    calculateRequiredInstances(pods, memoryMi, cpuM, instanceSpec) {
-        if (pods === 0) return 0;
-
-        const requiredMemoryGB = memoryMi / 1024;
-        const requiredCpuCores = cpuM / 1000;
-
-        const instancesForMemory = Math.ceil(requiredMemoryGB / instanceSpec.memory);
-        const instancesForCpu = Math.ceil(requiredCpuCores / instanceSpec.cpu);
-        const instancesForPods = Math.ceil(pods / 110);
-
-        return Math.max(instancesForMemory, instancesForCpu, instancesForPods);
-    }
-};
-
-// Utility functions for testing
-const ScalculatorUtils = {
-    calculateScaledJob(config) {
-        const minPods = Math.max(config.minReplicaCount || 0, config.parallelism || 1);
-        const maxPods = Math.max(config.maxReplicaCount || 0, config.parallelism || 1);
-        
-        return {
-            minPods,
-            maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
+            minMemoryMi: minPods * requestedMemory,
+            maxMemoryMi: maxPods * maxMemory,
+            minCpuM: minPods * requestedCpu,
+            maxCpuM: maxPods * requestedCpu
         };
     },
 
     calculateScaledObject(config) {
-        const minPods = config.minReplicaCount || 0;
-        const maxPods = config.maxReplicaCount || 0;
+        const minPods = Math.max(0, config.minReplicaCount || 0);
+        const maxPods = Math.max(0, config.maxReplicaCount || 0);
+        const requestedMemory = Math.max(0, config.requestedMemory || 0);
+        const requestedCpu = Math.max(0, config.requestedCpu || 0);
+        const maxMemory = Math.max(0, config.maxMemory || config.requestedMemory || 0);
         
         return {
             minPods,
             maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
+            minMemoryMi: minPods * requestedMemory,
+            maxMemoryMi: maxPods * maxMemory,
+            minCpuM: minPods * requestedCpu,
+            maxCpuM: maxPods * requestedCpu
         };
     },
 
@@ -490,32 +408,40 @@ const ScalculatorUtils = {
         let minPods, maxPods;
         
         if (config.hasHPA) {
-            minPods = config.minReplicaCount || 0;
-            maxPods = config.maxReplicaCount || 0;
+            minPods = Math.max(0, config.minReplicaCount || 0);
+            maxPods = Math.max(0, config.maxReplicaCount || 0);
         } else {
-            minPods = maxPods = config.replicas || 0;
+            const replicas = Math.max(0, config.replicas || 0);
+            minPods = maxPods = replicas;
         }
+        
+        const requestedMemory = Math.max(0, config.requestedMemory || 0);
+        const requestedCpu = Math.max(0, config.requestedCpu || 0);
+        const maxMemory = Math.max(0, config.maxMemory || config.requestedMemory || 0);
         
         return {
             minPods,
             maxPods,
-            minMemoryMi: minPods * (config.requestedMemory || 0),
-            maxMemoryMi: maxPods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: minPods * (config.requestedCpu || 0),
-            maxCpuM: maxPods * (config.requestedCpu || 0)
+            minMemoryMi: minPods * requestedMemory,
+            maxMemoryMi: maxPods * maxMemory,
+            minCpuM: minPods * requestedCpu,
+            maxCpuM: maxPods * requestedCpu
         };
     },
 
     calculateStatefulSet(config) {
-        const pods = config.replicas || 0;
+        const pods = Math.max(0, config.replicas || 0);
+        const requestedMemory = Math.max(0, config.requestedMemory || 0);
+        const requestedCpu = Math.max(0, config.requestedCpu || 0);
+        const maxMemory = Math.max(0, config.maxMemory || config.requestedMemory || 0);
         
         return {
             minPods: pods,
             maxPods: pods,
-            minMemoryMi: pods * (config.requestedMemory || 0),
-            maxMemoryMi: pods * (config.maxMemory || config.requestedMemory || 0),
-            minCpuM: pods * (config.requestedCpu || 0),
-            maxCpuM: pods * (config.requestedCpu || 0)
+            minMemoryMi: pods * requestedMemory,
+            maxMemoryMi: pods * maxMemory,
+            minCpuM: pods * requestedCpu,
+            maxCpuM: pods * requestedCpu
         };
     },
 

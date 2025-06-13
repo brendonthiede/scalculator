@@ -317,12 +317,18 @@ describe('Scalculator Tests', () => {
                 'c5.large', 'c5.xlarge', 'c5.2xlarge'
             ];
 
+            // Check that all expected types exist
+            const missingTypes = expectedTypes.filter(type => !(type in INSTANCE_TYPES));
+            expect(missingTypes).toEqual([]);
+
+            // Check that all types have the required properties
             expectedTypes.forEach(type => {
-                expect(INSTANCE_TYPES).toHaveProperty(type);
-                expect(INSTANCE_TYPES[type]).toHaveProperty('cpu');
-                expect(INSTANCE_TYPES[type]).toHaveProperty('memory');
-                expect(typeof INSTANCE_TYPES[type].cpu).toBe('number');
-                expect(typeof INSTANCE_TYPES[type].memory).toBe('number');
+                const instance = INSTANCE_TYPES[type];
+                expect(instance).toBeDefined();
+                expect(instance.cpu).toBeDefined();
+                expect(instance.memory).toBeDefined();
+                expect(typeof instance.cpu).toBe('number');
+                expect(typeof instance.memory).toBe('number');
             });
         });
     });
