@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalculator - Kubernetes Resource Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Scalculator</h1>
+            <p>Calculate the resource impact of different scaling decisions for various Kubernetes resources</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="calculator-section">
+                <div class="input-section">
+                    <h2>Configuration</h2>
+                    
+                    <!-- Resource Type Selector -->
+                    <div class="form-group">
+                        <label for="resourceType">Resource Type:</label>
+                        <select id="resourceType" name="resourceType">
+                            <option value="scaledJob">KEDA ScaledJob</option>
+                            <option value="scaledObject">KEDA ScaledObject</option>
+                            <option value="deployment">Deployment</option>
+                            <option value="statefulSet">StatefulSet</option>
+                        </select>
+                    </div>
+
+                    <!-- Instance Type Selector -->
+                    <div class="form-group">
+                        <label for="instanceType">Instance Type:</label>
+                        <select id="instanceType" name="instanceType">
+                            <option value="t3.micro">t3.micro (1 vCPU, 1 GB)</option>
+                            <option value="t3.small">t3.small (2 vCPU, 2 GB)</option>
+                            <option value="t3.medium">t3.medium (2 vCPU, 4 GB)</option>
+                            <option value="t3.large">t3.large (2 vCPU, 8 GB)</option>
+                            <option value="t3.xlarge">t3.xlarge (4 vCPU, 16 GB)</option>
+                            <option value="m5.large">m5.large (2 vCPU, 8 GB)</option>
+                            <option value="m5.xlarge" selected>m5.xlarge (4 vCPU, 16 GB)</option>
+                            <option value="m5.2xlarge">m5.2xlarge (8 vCPU, 32 GB)</option>
+                            <option value="m5.4xlarge">m5.4xlarge (16 vCPU, 64 GB)</option>
+                            <option value="c5.large">c5.large (2 vCPU, 4 GB)</option>
+                            <option value="c5.xlarge">c5.xlarge (4 vCPU, 8 GB)</option>
+                            <option value="c5.2xlarge">c5.2xlarge (8 vCPU, 16 GB)</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Input Fields -->
+                    <div id="dynamicInputs">
+                        <!-- Inputs will be populated dynamically based on resource type -->
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h2>Calculated Results</h2>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <label>Minimum Pods:</label>
+                            <span id="minPods">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Maximum Pods:</label>
+                            <span id="maxPods">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Minimum Memory (Total):</label>
+                            <span id="minMemory">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Maximum Memory (Total):</label>
+                            <span id="maxMemory">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Minimum CPU (Total):</label>
+                            <span id="minCpu">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Maximum CPU (Total):</label>
+                            <span id="maxCpu">-</span>
+                        </div>
+                        <div class="result-item">
+                            <label>Required Instances:</label>
+                            <span id="requiredInstances">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Scalculator. Built for Kubernetes resource planning.</p>
+            <div class="footer-links">
+                <a href="https://kubernetes.io/docs/" target="_blank">Kubernetes Docs</a>
+                <a href="https://keda.sh/" target="_blank">KEDA Documentation</a>
+                <a href="https://github.com" target="_blank">Source Code</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,37 @@
+{
+  "name": "scalculator",
+  "version": "1.0.0",
+  "description": "A calculator for determining the resource impact of different scaling decisions for various Kubernetes resources",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "kubernetes",
+    "scaling",
+    "calculator",
+    "resource-planning",
+    "keda",
+    "hpa"
+  ],
+  "author": "Scalculator Team",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "script.js",
+      "!node_modules/**"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  }
+} 
