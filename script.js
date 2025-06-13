@@ -157,7 +157,9 @@ class Scalculator {
         if (!field.showWhen) return true;
         
         for (const [key, expectedValue] of Object.entries(field.showWhen)) {
-            if (values[key] !== expectedValue) {
+            // Handle undefined values - for boolean conditions, treat undefined as false
+            const actualValue = values[key] !== undefined ? values[key] : (typeof expectedValue === 'boolean' ? false : values[key]);
+            if (actualValue !== expectedValue) {
                 return false;
             }
         }
