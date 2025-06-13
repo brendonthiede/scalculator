@@ -110,8 +110,14 @@ class Scalculator {
             this.calculateResults();
         });
 
-        this.dynamicInputsContainer.addEventListener('change', () => {
-            this.handleToggleChange();
+        this.dynamicInputsContainer.addEventListener('change', (event) => {
+            // Only handle toggle changes, not regular input changes
+            if (event.target.type === 'checkbox') {
+                this.handleToggleChange();
+            } else {
+                // For regular inputs, just recalculate
+                this.calculateResults();
+            }
         });
     }
 
