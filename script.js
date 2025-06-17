@@ -32,7 +32,7 @@ const RESOURCE_CONFIGS = {
                 label: 'Replica Count', 
                 type: 'group', 
                 fields: [
-                    { id: 'minReplicaCount', label: 'Min', type: 'number', min: 0, placeholder: '1' },
+                    { id: 'minReplicaCount', label: 'Min', type: 'number', min: 0, placeholder: '0' },
                     { id: 'maxReplicaCount', label: 'Max', type: 'number', min: 1, placeholder: '10' }
                 ]
             },
@@ -291,7 +291,9 @@ class Scalculator {
             if (input.type === 'checkbox') {
                 values[input.id] = input.checked;
             } else if (input.type === 'number') {
-                values[input.id] = parseFloat(input.value) || 0;
+                // Use placeholder value as default if no value is entered
+                const placeholderValue = parseFloat(input.placeholder) || 0;
+                values[input.id] = parseFloat(input.value) || placeholderValue;
             } else {
                 values[input.id] = input.value;
             }
