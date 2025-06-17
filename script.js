@@ -16,7 +16,10 @@ const INSTANCE_TYPES = {
     'm5.4xlarge': { cpu: 16, memory: 64 },
     'c5.large': { cpu: 2, memory: 4 },
     'c5.xlarge': { cpu: 4, memory: 8 },
-    'c5.2xlarge': { cpu: 8, memory: 16 }
+    'c5.2xlarge': { cpu: 8, memory: 16 },
+    'r5a.xlarge': { cpu: 4, memory: 32 },
+    'r5a.2xlarge': { cpu: 8, memory: 64 },
+    'r5a.4xlarge': { cpu: 16, memory: 128 },
 };
 
 // Resource type configurations
@@ -323,62 +326,35 @@ class Scalculator {
             throw new Error('Invalid instance type');
         }
 
-        let minPods, maxPods;
-
-        // Calculate pod counts based on resource type
+        // Use the same calculation logic as ScalculatorUtils for consistency
+        let baseResult;
         switch (resourceType) {
             case 'scaledJob':
-                minPods = Math.max(values.minReplicaCount || 0, values.parallelism || 1);
-                maxPods = Math.max(values.maxReplicaCount || 0, values.parallelism || 1);
+                baseResult = ScalculatorUtils.calculateScaledJob(values);
                 break;
-            
             case 'scaledObject':
-                minPods = values.minReplicaCount || 0;
-                maxPods = values.maxReplicaCount || 0;
+                baseResult = ScalculatorUtils.calculateScaledObject(values);
                 break;
-            
             case 'deployment':
-                if (values.hasHPA) {
-                    minPods = values.minReplicaCount || 0;
-                    maxPods = values.maxReplicaCount || 0;
-                } else {
-                    minPods = maxPods = values.replicas || 0;
-                }
+                baseResult = ScalculatorUtils.calculateDeployment(values);
                 break;
-            
             case 'statefulSet':
-                minPods = maxPods = values.replicas || 0;
+                baseResult = ScalculatorUtils.calculateStatefulSet(values);
                 break;
-            
             default:
                 throw new Error('Unknown resource type');
         }
 
-        // Calculate memory and CPU totals
-        const requestedMemoryMi = values.requestedMemory || 0;
-        const requestedCpuM = values.requestedCpu || 0;
-        const maxMemoryMi = values.maxMemory || requestedMemoryMi;
-
-        const minMemoryMi = minPods * requestedMemoryMi;
-        const maxMemoryMiTotal = maxPods * maxMemoryMi;
-        const minCpuM = minPods * requestedCpuM;
-        const maxCpuM = maxPods * requestedCpuM;
-
         // Calculate required instances
         const requiredInstances = this.calculateRequiredInstances(
-            maxPods, 
-            maxMemoryMiTotal, 
-            maxCpuM, 
+            baseResult.maxPods, 
+            baseResult.maxMemoryMi, 
+            baseResult.maxCpuM, 
             instanceSpec
         );
 
         return {
-            minPods,
-            maxPods,
-            minMemoryMi,
-            maxMemoryMi: maxMemoryMiTotal,
-            minCpuM,
-            maxCpuM,
+            ...baseResult,
             requiredInstances
         };
     }
@@ -387,18 +363,7 @@ class Scalculator {
      * Calculate required instances based on resource requirements
      */
     calculateRequiredInstances(pods, memoryMi, cpuM, instanceSpec) {
-        if (pods === 0) return 0;
-
-        // Convert Mi to GB and m to cores
-        const requiredMemoryGB = memoryMi / 1024;
-        const requiredCpuCores = cpuM / 1000;
-
-        // Calculate instances needed based on memory and CPU constraints
-        const instancesForMemory = Math.ceil(requiredMemoryGB / instanceSpec.memory);
-        const instancesForCpu = Math.ceil(requiredCpuCores / instanceSpec.cpu);
-        const instancesForPods = Math.ceil(pods / 110); // Typical max pods per node
-
-        return Math.max(instancesForMemory, instancesForCpu, instancesForPods);
+        return ScalculatorUtils.calculateRequiredInstances(pods, memoryMi, cpuM, instanceSpec);
     }
 
     /**
@@ -453,15 +418,15 @@ class Scalculator {
 // Utility functions for testing
 const ScalculatorUtils = {
     calculateScaledJob(config) {
-        const minReplicaCount = Math.max(0, config.minReplicaCount || 0);
-        const maxReplicaCount = Math.max(0, config.maxReplicaCount || 0);
-        const parallelism = Math.max(0, config.parallelism || 1);
-        const requestedMemory = Math.max(0, config.requestedMemory || 0);
-        const requestedCpu = Math.max(0, config.requestedCpu || 0);
-        const maxMemory = Math.max(0, config.maxMemory || config.requestedMemory || 0);
+        const minReplicaCount = config.minReplicaCount || 0;
+        const maxReplicaCount = config.maxReplicaCount || 0;
+        const parallelism = config.parallelism || 1;
+        const requestedMemory = config.requestedMemory || 0;
+        const requestedCpu = config.requestedCpu || 0;
+        const maxMemory = config.maxMemory || config.requestedMemory || 0;
         
-        const minPods = Math.max(minReplicaCount, parallelism);
-        const maxPods = Math.max(maxReplicaCount, parallelism);
+        const minPods = minReplicaCount * parallelism;
+        const maxPods = maxReplicaCount * parallelism;
         
         return {
             minPods,

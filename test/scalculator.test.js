@@ -15,12 +15,12 @@ describe('Scalculator Tests', () => {
 
             const result = ScalculatorUtils.calculateScaledJob(config);
 
-            expect(result.minPods).toBe(5); // max(2, 5) = 5
-            expect(result.maxPods).toBe(10); // max(10, 5) = 10
-            expect(result.minMemoryMi).toBe(1280); // 5 * 256
-            expect(result.maxMemoryMi).toBe(5120); // 10 * 512
-            expect(result.minCpuM).toBe(500); // 5 * 100
-            expect(result.maxCpuM).toBe(1000); // 10 * 100
+            expect(result.minPods).toBe(10); // 2 * 5 = 10
+            expect(result.maxPods).toBe(50); // 10 * 5 = 50
+            expect(result.minMemoryMi).toBe(2560); // 10 * 256
+            expect(result.maxMemoryMi).toBe(50 * 512); // 50 * 512
+            expect(result.minCpuM).toBe(1000); // 10 * 100
+            expect(result.maxCpuM).toBe(5000); // 50 * 100
         });
 
         test('should calculate ScaledJob with min replicas greater than parallelism', () => {
@@ -35,18 +35,18 @@ describe('Scalculator Tests', () => {
 
             const result = ScalculatorUtils.calculateScaledJob(config);
 
-            expect(result.minPods).toBe(8); // max(8, 3) = 8
-            expect(result.maxPods).toBe(15); // max(15, 3) = 15
-            expect(result.minMemoryMi).toBe(1024); // 8 * 128
-            expect(result.maxMemoryMi).toBe(3840); // 15 * 256
+            expect(result.minPods).toBe(24); // 8 * 3 = 24
+            expect(result.maxPods).toBe(45); // 15 * 3 = 45
+            expect(result.minMemoryMi).toBe(24 * 128); // 24 * 128
+            expect(result.maxMemoryMi).toBe(45 * 256); // 45 * 256
         });
 
         test('should handle ScaledJob with default values', () => {
             const config = {};
             const result = ScalculatorUtils.calculateScaledJob(config);
 
-            expect(result.minPods).toBe(1); // max(0, 1) = 1
-            expect(result.maxPods).toBe(1); // max(0, 1) = 1
+            expect(result.minPods).toBe(0); // 0 * 1
+            expect(result.maxPods).toBe(0); // 0 * 1
             expect(result.minMemoryMi).toBe(0);
             expect(result.maxMemoryMi).toBe(0);
             expect(result.minCpuM).toBe(0);
