@@ -36,14 +36,14 @@ header h1 {
 header p {
     font-size: 0.95rem;
     opacity: 0.9;
-    max-width: 600px;
+    max-width: 75%;
     margin: 0 auto;
 }
 
 /* Main content - reduced padding */
 main {
     padding: 1.5rem 0;
-    min-height: calc(100vh - 150px);
+    min-height: calc(100vh - 213px);
 }
 
 .calculator-section {
